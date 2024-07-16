@@ -9,6 +9,8 @@ class ProdukController extends BaseController
 {
     protected $product;
     protected $validation;
+    protected $table = 'produk';
+    protected $allowedFields = ['nama', 'price', 'quantity'];
 
     function __construct()
     {
@@ -45,6 +47,36 @@ class ProdukController extends BaseController
     return redirect('produk')->with('success', 'Data Berhasil Ditambah');
 } 
 
+public function store()
+    {
+        helper(['form', 'url']);
+        
+        $validation = \Config\Services::validation();
+
+        $validation->setRules([
+            'nama' => 'required|min_length[3]',
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric'
+        ]);
+        if (!$this->validate($validation->getRules())) {
+            return view('product_form', [
+                'validation' => $this->validator
+            ]);
+        }
+
+        $model = new ProductModel();
+
+        $data = [
+            'nama' => $this->request->getPost('nama'),
+            'price' => $this->request->getPost('price'),
+            'quantity' => $this->request->getPost('quantity'),
+        ];
+
+        $model->save($data);
+
+        return redirect()->to('v_produk');
+    }
+    
 public function edit($id)
 {
     $dataProduk = $this->product->find($id);

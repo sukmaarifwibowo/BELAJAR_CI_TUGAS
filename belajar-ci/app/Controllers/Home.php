@@ -3,10 +3,13 @@
 namespace App\Controllers;
 
 use App\Models\ProductModel;
+use App\Models\TransactionModel;
 
 class Home extends BaseController
 {
     protected $product;
+    protected $table = 'transactions';
+    protected $allowedFields = ['product', 'status'];
 
     function __construct()
     {
@@ -23,35 +26,30 @@ class Home extends BaseController
         return view('v_home', $data);
     }
 
+    public function transaksi()
+    {
+        $model = new TransactionModel();
+        $data['v_transaksi'] = $model->findAll();
+            return view('v_transaksi');
+        }
+
     public function faq()
     {
         return view('v_faq');
     }
 
-    public function profile()
-{
-    $username = session()->get('username');
-    $data['username'] = $username;
+    public function updateStatus($id)
+    {
+        $model = new TransactionModel();
+        $transaction = $model->find($id);
 
-    $buy = $this->transaction->where('username', $username)->findAll();
-    $data['buy'] = $buy;
-
-    $product = [];
-
-    if (!empty($buy)) {
-        foreach ($buy as $item) {
-            $detail = $this->transaction_detail->select('transaction_detail.*, product.nama, product.harga, product.foto')->join('product', 'transaction_detail.product_id=product.id')->where('transaction_id', $item['id'])->findAll();
-
-            if (!empty($detail)) {
-                $product[$item['id']] = $detail;
-            }
+        if ($transaction) {
+            $transaction['status'] = $transaction['status'] ? 0 : 1;
+            $model->update($id, $transaction);
         }
+
+        return redirect()->to('v_transaksi');
     }
-
-    $data['product'] = $product;
-
-    return view('v_profile', $data);
-}
 
     public function contact()
     {
