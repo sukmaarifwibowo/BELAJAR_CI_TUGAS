@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Controllers;
-
+use App\Models\TransactionModel;
+use App\Models\TransactionDetailModel;
 
 
 class TransaksiController extends BaseController
@@ -9,12 +10,16 @@ class TransaksiController extends BaseController
     protected $cart;
     protected $url = "https://api.rajaongkir.com/starter/";
     protected $apiKey = "171ae7bf1d9217c7e6534d2bc58dd57b";
+    protected $transaction;
+    protected $transaction_detail;
 
     function __construct()
     {
         helper('number');
         helper('form');
         $this->cart = \Config\Services::cart();
+        $this->transaction = new TransactionModel();
+        $this->transaction_detail = new TransactionDetailModel();
     }
 
     public function index()

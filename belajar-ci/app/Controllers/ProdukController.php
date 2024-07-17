@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ProductModel;
+use App\Models\TransactionModel;
 use Dompdf\Dompdf;
 
 class ProdukController extends BaseController

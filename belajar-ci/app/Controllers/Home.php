@@ -4,18 +4,21 @@ namespace App\Controllers;
 
 use App\Models\ProductModel;
 use App\Models\TransactionModel;
+use App\Models\TransactionDetailModel;
 
 class Home extends BaseController
 {
     protected $product;
-    protected $table = 'transactions';
-    protected $allowedFields = ['product', 'status'];
+    protected $transaction;
+    protected $transaction_detail;
 
     function __construct()
     {
         helper('form');
         helper('number');
         $this->product = new ProductModel();
+        $this->transaction = new TransactionModel();
+        $this->transaction_detail = new TransactionDetailModel();
     }
 
     public function index(): string
@@ -26,29 +29,40 @@ class Home extends BaseController
         return view('v_home', $data);
     }
 
-    public function transaksi()
+    public function profile()
     {
-        $model = new TransactionModel();
-        $data['v_transaksi'] = $model->findAll();
-            return view('v_transaksi');
+        $username = session()->get('username');
+        $data['username'] = $username;
+    
+        $buy = $this->transaction->where('username', $username)->findAll();
+        $data['buy'] = $buy;
+    
+        $product = [];
+    
+        if (!empty($buy)) {
+            foreach ($buy as $item) {
+                $detail = $this->transaction_detail->select('transaction_detail.*, product.nama, product.harga, product.foto')->join('product', 'transaction_detail.product_id=product.id')->where('transaction_id', $item['id'])->findAll();
+    
+                if (!empty($detail)) {
+                    $product[$item['id']] = $detail;
+                }
+            }
         }
+    
+        $data['product'] = $product;
+    
+        return view('v_profile', $data);
+    }
+
+    public function transaksi()
+        {
+            
+            return view('v_transaksi');
+            }
 
     public function faq()
     {
         return view('v_faq');
-    }
-
-    public function updateStatus($id)
-    {
-        $model = new TransactionModel();
-        $transaction = $model->find($id);
-
-        if ($transaction) {
-            $transaction['status'] = $transaction['status'] ? 0 : 1;
-            $model->update($id, $transaction);
-        }
-
-        return redirect()->to('v_transaksi');
     }
 
     public function contact()

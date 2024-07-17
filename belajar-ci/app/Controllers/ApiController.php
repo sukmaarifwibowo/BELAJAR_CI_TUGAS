@@ -15,7 +15,8 @@ class ApiController extends ResourceController
     protected $user;
     protected $transaction;
     protected $transaction_detail;
-        function __construct()
+        
+    function __construct()
         {
             $this->user = new UserModel();
             $this->transaction = new TransactionModel();

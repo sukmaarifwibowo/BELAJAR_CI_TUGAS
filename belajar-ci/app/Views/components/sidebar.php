@@ -30,18 +30,18 @@
         ?>
 
 <li class="nav-item">
-    <a class="nav-link <?php echo (uri_string() == 'transaksi') ? "" : "collapsed" ?>" href="transaksi">
+    <a class="nav-link <?php echo (uri_string() == 'Transaksi') ? "" : "collapsed" ?>" href="Transaksi">
         <i class="bi bi-person"></i>
         <span>Transaksi</span>
     </a>
 </li><!-- End Profile Nav -->
 
-        <li class="nav-item">
-            <a class="nav-link <?php echo (uri_string() == 'profile') ? "" : "collapsed" ?>" href="profile">
-                <i class="bi bi-person"></i>
-                <span>Profile</span>
-            </a>
-        </li> <!-- End Profile Nav -->
+<li class="nav-item">
+    <a class="nav-link <?php echo (uri_string() == 'profile') ? "" : "collapsed" ?>" href="profile">
+        <i class="bi bi-person"></i>
+        <span>Profile</span>
+    </a>
+</li><!-- End Profile Nav -->
 
         <li class="nav-item">
             <a class="nav-link <?php echo (uri_string() == 'faq') ? "" : "collapsed" ?>" href="faq">
